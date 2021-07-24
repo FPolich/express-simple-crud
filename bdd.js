@@ -1,6 +1,6 @@
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user:'Frann',
+    user:'postgres',
     host:'localhost',
     database:'postgres',
     password: '1234',
@@ -22,7 +22,7 @@ const getAll = (request, response) => {
 
 const getById = (request, response) => {
     const id = parseInt(request.params.id)
-    pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
+    pool.query('SELECT * FROM tabla_ejemplo WHERE id = $1', [id], (error, results) => {
       if (error) {
         throw error
       }
@@ -31,15 +31,14 @@ const getById = (request, response) => {
   }
 
 //POST
-
 const create = (request, response) => {
     const { titulo, genero, anio } = request.body
-  
-    pool.query('INSERT INTO tabla_ejemplo (titulo, genero, anio) VALUES ($1, $2, $3)', [titulo, genero, anio], (error, results) => {
+    const queryRequest = "INSERT INTO tabla_ejemplo (titulo, genero, anio) VALUES ($1, $2, $3)"
+    pool.query(queryRequest,[titulo, genero, anio], (error, results) => {
       if (error) {
         throw error
       }
-      response.status(201).send(`Added by ID: ${result.insertId}`)
+      response.status(201).send(`Added by ID: ${results.insertId}`)
     })
   }
 
